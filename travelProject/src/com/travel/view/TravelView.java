@@ -163,6 +163,7 @@ public class TravelView {
             System.out.println("1. 맛집 정보");
             System.out.println("2. 관광지 정보");
             System.out.println("3. 여행 Tip"); // 여행 Tip 메뉴 추가
+            System.out.println("4. 종료");
             System.out.println("0. 이전 메뉴로 돌아가기");
             System.out.print("원하는 정보 타입을 선택하세요 (번호): ");
 
@@ -177,7 +178,12 @@ public class TravelView {
             if (typeChoice == 0) {
                 break; // 0 입력 시 이전 메뉴로 돌아감
             }
-
+            
+            if (typeChoice == 4) {
+            	System.out.println("시스템을 종료합니다");
+            	System.exit(0);
+                break; // 0 입력 시 이전 메뉴로 돌아감
+            }
             // 선택된 정보 유형에 따라 해당 메서드 호출
             switch (typeChoice) {
                 case 1:
@@ -189,6 +195,8 @@ public class TravelView {
                 case 3:
                     displayTravelTips(countryId); // 여행 Tip 정보 표시
                     break;
+                case 4:
+                	System.exit(0);
                 default:
                     System.out.println("잘못된 정보 타입입니다. 다시 선택해주세요.");
             }
