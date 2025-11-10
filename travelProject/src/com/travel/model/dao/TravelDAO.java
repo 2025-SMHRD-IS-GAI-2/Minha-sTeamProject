@@ -10,6 +10,6 @@ public interface TravelDAO {
     List<TouristVO> getTouristsByCountryId(String countryId);
     List<TravelTipVO> getTravelTipsByCountryId(String countryId); // 여행 Tip 메서드 추가
 
-    void insertData(Object info);
-    void deleteData(String id);
+  
+    
 }

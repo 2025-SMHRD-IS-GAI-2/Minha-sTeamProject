@@ -69,13 +69,29 @@ public class TravelView {
                 break; // 대륙 정보가 없으면 프로그램 종료
             }
 
-            System.out.println("\n--- 1. 대륙 선택 ---");
-            // 대륙 목록을 번호와 함께 출력
+            // --- ★여기 수정★ 대륙 선택 프레임 적용 시작 ---
+            printAsciiFrameTop("대륙 선택");
+            System.out.println("|　                                      				|"); // 빈 줄
+            System.out.println("|　             원하는 대륙의 번호를 입력해주세요. 				|");
+            System.out.println("|　                                      				|"); // 빈 줄
             for (int i = 0; i < continents.size(); i++) {
-                System.out.printf("%d. %s%n", (i + 1), continents.get(i).getName());
+                // 각 대륙 목록을 프레임 내에 출력 (총 길이 65, 앞뒤 | 및 띄어쓰기 4 포함)
+                String option = String.format("%d. %s", (i + 1), continents.get(i).getName());
+                // UTF-8 환경에서 한글은 2칸 차지하므로, 패딩 계산 시 고려
+                int paddingLeft = 4; // '|   '
+                int paddingRight = 65 - paddingLeft - option.length(); // '|' 포함
+                if (continents.get(i).getName().matches(".*[가-힣]+.*")) { // 한글 포함 시
+                     // 대략적인 한글 1글자 = 영어/숫자 2글자 너비로 간주
+                     // 정확한 계산은 어려우므로 여백으로 조절
+                    paddingRight -= (int)(continents.get(i).getName().length() * 0.5);
+                }
+                System.out.printf("|%s%s%s	|\n", " ".repeat(paddingLeft - 1), option, " ".repeat(paddingRight));
             }
-            System.out.println("0. 프로그램 종료");
+            System.out.println("|　0. 프로그램 종료                                                		|");
+            printAsciiFrameBottom();
+            // --- ★여기 수정★ 대륙 선택 프레임 적용 끝 ---
             System.out.print("대륙을 선택하세요 (번호): ");
+
 
             int continentChoice = -1;
             try {
@@ -119,12 +135,23 @@ public class TravelView {
                 break; // 국가 정보가 없으면 이전 메뉴로 돌아감
             }
 
-            System.out.println("\n--- 2. 나라 선택 ---");
-            // 국가 목록을 번호와 함께 출력
+            // --- ★여기 수정★ 나라 선택 프레임 적용 시작 ---
+            printAsciiFrameTop("나라 선택");
+            System.out.println("|　                                                                	|"); // 빈 줄
+            System.out.println("|　             원하는 국가의 번호를 입력해주세요.                 　　　  		|");
+            System.out.println("|　                                                                	|"); // 빈 줄
             for (int i = 0; i < countries.size(); i++) {
-                System.out.println((i + 1) + ". " + countries.get(i).getName());
+                String option = String.format("%d. %s", (i + 1), countries.get(i).getName());
+                int paddingLeft = 4;
+                int paddingRight = 65 - paddingLeft - option.length();
+                if (countries.get(i).getName().matches(".*[가-힣]+.*")) {
+                    paddingRight -= (int)(countries.get(i).getName().length() * 0.5);
+                }
+                System.out.printf("|%s%s%s	|\n", " ".repeat(paddingLeft - 1), option, " ".repeat(paddingRight));
             }
-            System.out.println("0. 이전 메뉴로 돌아가기");
+            System.out.println("|　0. 이전 메뉴로 돌아가기                                           		|");
+            printAsciiFrameBottom();
+            // --- ★여기 수정★ 나라 선택 프레임 적용 끝 ---
             System.out.print("나라를 선택하세요 (번호): ");
 
             int countryChoice = -1;
@@ -159,12 +186,9 @@ public class TravelView {
         String countryName = getCountryNameById(countryId); // 선택된 국가의 이름 가져오기
 
         while (true) {
-            System.out.println("\n--- 3. 컨셉 선택 (" + (countryName != null ? countryName : "선택된 나라") + ") ---");
-            System.out.println("1. 맛집 정보");
-            System.out.println("2. 관광지 정보");
-            System.out.println("3. 여행 Tip"); // 여행 Tip 메뉴 추가
-            System.out.println("4. 종료");
-            System.out.println("0. 이전 메뉴로 돌아가기");
+            // --- ★여기 수정★ 컨셉 선택 프레임 적용 시작 ---
+            printInfoTypeAsciiFrame(countryName); // 새로운 메서드를 통해 프레임과 선택지 출력
+            // --- ★여기 수정★ 컨셉 선택 프레임 적용 끝 ---
             System.out.print("원하는 정보 타입을 선택하세요 (번호): ");
 
             int typeChoice = -1;
@@ -178,12 +202,12 @@ public class TravelView {
             if (typeChoice == 0) {
                 break; // 0 입력 시 이전 메뉴로 돌아감
             }
-            
             if (typeChoice == 4) {
             	System.out.println("시스템을 종료합니다");
             	System.exit(0);
                 break; // 0 입력 시 이전 메뉴로 돌아감
             }
+            
             // 선택된 정보 유형에 따라 해당 메서드 호출
             switch (typeChoice) {
                 case 1:
@@ -197,6 +221,7 @@ public class TravelView {
                     break;
                 case 4:
                 	System.exit(0);
+                	break;
                 default:
                     System.out.println("잘못된 정보 타입입니다. 다시 선택해주세요.");
             }
@@ -306,17 +331,63 @@ public class TravelView {
                 System.out.println("\n--- 유럽 ---");
                 printEuropeAsciiArt();
                 break;
-            case "NA": // ★여기에 북아메리카 대륙 케이스 추가★
+            case "NA":
                 System.out.println("\n--- 북아메리카 ---");
                 printNorthAmericaAsciiArt();
                 break;
-            // 다른 대륙에 대한 아스키 아트는 여기에 'case "대륙ID": printOtherContinentAsciiArt(); break;' 형태로 계속 추가할 수 있습니다.
             default:
                 // 해당 대륙에 맞는 아스키 아트가 없는 경우 처리 (예: 아무것도 출력 안 함)
                 break;
         }
         System.out.println("\n"); // 아스키 아트 후 여백
     }
+
+    // --- 아스키 아트 프레임 헬퍼 메서드 시작 ---
+
+    /**
+     * 아스키 아트 프레임의 상단 부분(알림 제목)을 출력합니다.
+     * @param title 프레임 안에 표시될 메뉴 제목 (예: "대륙 선택", "나라 선택")
+     */
+    private void printAsciiFrameTop(String title) {
+        System.out.println("￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣");
+        // 가운데 정렬을 위해 남은 공간 계산. 총 가로 38글자.
+        String alertText = "알림 - " + title;
+        int totalWidth = 65; // 프레임 내부 총 너비 (한글 2칸, 영문 1칸)
+        int textLength = alertText.length();
+        if (alertText.matches(".*[가-힣]+.*")) { // 한글 포함 시
+            textLength += (int)(alertText.length() * 0.5); // 대략적인 한글 너비 보정
+        }
+        
+        int rightAlignFixedPartLength = "[－][口][×]".length(); // [－][口][×] 부분의 길이
+        int paddingBetweenAlertAndFixed = totalWidth - textLength - rightAlignFixedPartLength - 3; // '|' + ' ' + ' ' + '|'
+
+        System.out.printf("|　%s%s%s 		|%n", alertText, " ".repeat(Math.max(0, paddingBetweenAlertAndFixed)), "[－][口][×]");
+        System.out.println("|￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣|");
+    }
+
+    /**
+     * 아스키 아트 프레임의 하단 부분(`원하는 정보를 선택해주세요.` 메시지와 하단 경계)을 출력합니다.
+     */
+    private void printAsciiFrameBottom() {
+        System.out.println("￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣");
+    }
+
+    /**
+     * 컨셉 선택 메뉴 (맛집, 관광지, 여행 팁)를 아스키 아트 프레임 안에 출력합니다.
+     * @param countryName 선택된 국가의 이름
+     */
+    private void printInfoTypeAsciiFrame(String countryName) {
+        printAsciiFrameTop("컨셉 선택 (" + (countryName != null ? countryName : "선택된 나라") + ")");
+        	System.out.println("|　 원하는 정보 타입을 선택해주세요.　　                                  					|"); // 24글자 + 32칸 공백. 총 64칸
+        	System.out.println("|　                                                            					|");
+        	System.out.println("|　　  ＿＿＿＿＿＿　　　   ＿＿＿＿＿＿　　　　  ＿＿＿＿＿＿　        	 ＿＿＿＿＿＿       			|");
+        	System.out.println("| 　  ｜1. 맛집 ｜　　　 ｜2. 관광지｜　 　  ｜3. 여행 팁｜  		｜4. 종료  ｜				|");
+	        System.out.println("|　　  ￣￣￣￣￣￣　　　   ￣￣￣￣￣￣   　　  ￣￣￣￣￣￣　    	 ￣￣￣￣￣￣				|");
+	        System.out.println("|　                                                             					|"); // 빈 줄
+	        System.out.println("|　	0. 이전 메뉴로 돌아가기                                           				|");
+        printAsciiFrameBottom();
+    }
+    // --- 아스키 아트 프레임 헬퍼 메서드 끝 ---
 
     /**
      * 남아메리카를 나타내는 아스키 아트를 출력합니다.
@@ -346,7 +417,7 @@ public class TravelView {
         System.out.println("⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢹⣿⣿⣿⣿⣿⣿⣗⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀");
         System.out.println("⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠸⢿⣿⣿⣿⣿⡦⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀");
         System.out.println("⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠸⣿⣿⣿⡿⠂⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀");
-        System.out.println("⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⢮⣿⣿⣿⣦⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀");
+        System.out.println("⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀\t⢀⢮⣿⣿⣿⣦⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀");
         System.out.println("⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⣿⣿⣿⡏⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀");
         System.out.println("⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠹⣿⣿⣆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀");
         System.out.println("⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠥⢿⠖⠂");
@@ -362,7 +433,7 @@ public class TravelView {
         System.out.println("⠀⠀⠀⠀⠀⠀⢽⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣶⣷⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⡄⣀⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀");
         System.out.println("⠀⠀⠀⠀⠀⠀⠀⠘⠉⣉⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠁⠀⠀⠀⢀⠀⠀⠀⠀⠀⠀⠀⠀");
         System.out.println("⠀⠀⠀⠀⠀⠀⠀⠀⠘⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇⠀⠀⠀⠀⠀⣰⣷⠴⠀⠀⠀⠀⠀⠀");
-        System.out.println("⠀⠀⠀⠀⠀⠀⠀⠀⠀⢘⣹⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⢿⣿⣿⣿⡟⠁⠀⠀⠀⠀⢈⣆⠉⠀⠀⠀⠀⠀⠀⠀");
+        System.out.println("⠀⠀⠀⠀⠀⠀⠀⠀⠀⢘⣹⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⢿⣿⣿⣿⡟⠁⠀⠀⠀⠀⢈⣆⠉⠀⠀⠀⠀⠀⠀⠀");
         System.out.println("⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣹⠿⠿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣟⡉⡀⠋⠈⢿⣧⡀⠀⠀⠀⠀⢀⣰⡟⠀⠀⠀⠀⠀⠀⠀⠀");
         System.out.println("⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢹⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠋⠁⠀⢀⣿⠇⠀⣠⣠⣸⣾⠿⠁⠀⠀⠀⠀⠀⠀⠀⠀");
         System.out.println("⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢼⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣇⠀⠀⠀⠂⠐⣾⠑⠃⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀");
@@ -433,8 +504,8 @@ public class TravelView {
         System.out.println("⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠻⢿⡿⠿⣿⠛⠓⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢈⣶⣤⠄⠀⠀⠀⠀⠀");
         System.out.println("⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠐⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡀⠙⣿⠃⠀⠀⠀⠀⠀⠀");
         System.out.println("⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠹⣿⠏⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣰⡿⠂⠁⠀⠀⠀⠀⠀⠀⠀");
-        System.out.println("⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣴⣾⠟⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀");
-        System.out.println("⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⡟⠟⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀");
+        System.out.println("⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀\t\t\t⢀⣴⣾⠟⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀");
+        System.out.println("⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀\t\t\t⠙⡟⠟⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀");
         System.out.println("⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀");
     }
 
