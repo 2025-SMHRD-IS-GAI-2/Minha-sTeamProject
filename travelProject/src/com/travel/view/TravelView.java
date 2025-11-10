@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
 
+// 동 왔다감 ~.~ ------------------------
 /**
  * <p>사용자 인터페이스(UI)를 담당하는 클래스입니다.</p>
  * <p>사용자로부터 입력을 받아 TravelController에 요청하고, 결과를 화면에 출력합니다.</p>
