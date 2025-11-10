@@ -5,6 +5,7 @@ import java.util.List;
 
 public interface TravelController {
     List<ContinentVO> showContinents();
+    // 앗싸 오늘 월요일 5시 퇴근 집가서 씻고 넷플리스 보다가 디비 자야지!
     List<CountryVO> showCountries(String continentId);
     // 마라맛 아메리카노팀 화이팅!!
     List<RestaurantVO> showRestaurants(String countryId);
